@@ -13,11 +13,7 @@ use constant KEY_BASE_NAME    => 'plack.request.withencoding';
 use constant DEFAULT_ENCODING => 'utf-8';
 
 sub encoding {
-    my $self = shift;
-
-    my $encoding_key = KEY_BASE_NAME . '.encoding';
-    $self->env->{$encoding_key} = defined $self->env->{$encoding_key} ? $self->env->{$encoding_key}
-                                                                      : DEFAULT_ENCODING;
+    $_[0]->env->{KEY_BASE_NAME . '.encoding'} ||= DEFAULT_ENCODING;
 }
 
 sub body_parameters {

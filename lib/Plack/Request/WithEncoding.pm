@@ -61,8 +61,8 @@ sub raw_param {
 sub _decode_parameters {
     my ($self, $stuff) = @_;
 
-    my $encoding = $self->encoding;
-    unless (Encode::find_encoding($encoding)) {
+    my $encoding = Encode::find_encoding($self->encoding);
+    unless ($encoding) {
         my $error_message = sprintf("Unknown encoding '%s'. It will use '%s'.", $encoding, DEFAULT_ENCODING);
         Carp::croak($error_message);
     }

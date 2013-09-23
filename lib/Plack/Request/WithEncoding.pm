@@ -74,13 +74,14 @@ sub _decode_parameters {
 
     my $encoding = Encode::find_encoding($self->encoding);
     unless ($encoding) {
-        Carp::croak("Unknown encoding '$encoding'.");
+        my $invalid_encoding = $self->encoding;
+        Carp::croak("Unknown encoding '$invalid_encoding'.");
     }
 
     my @flatten  = $stuff->flatten;
     my @decoded;
     while ( my ($k, $v) = splice @flatten, 0, 2 ) {
-        push @decoded, Encode::decode($encoding, $k), Encode::decode($encoding, $v);
+        push @decoded, $encoding->decode($encoding, $k), $encoding->decode($encoding, $v);
     }
     return Hash::MultiValue->new(@decoded);
 }

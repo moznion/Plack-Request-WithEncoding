@@ -39,26 +39,27 @@ sub parameters {
     }
 }
 
-sub body_parameters_raw {
+sub raw_body_parameters {
     shift->SUPER::body_parameters;
 }
 
-sub query_parameters_raw {
+sub raw_query_parameters {
     shift->SUPER::query_parameters;
 }
 
-sub parameters_raw {
+sub raw_parameters {
     shift->SUPER::parameters;
 }
 
-sub param_raw {
+sub raw_param {
     my $self = shift;
 
-    return keys %{ $self->parameters_raw } if @_ == 0;
+    my $raw_parameters = $self->raw_parameters;
+    return keys %{ $raw_parameters } if @_ == 0;
 
     my $key = shift;
-    return $self->parameters_raw->{$key} unless wantarray;
-    return $self->parameters_raw->get_all($key);
+    return $raw_parameters->{$key} unless wantarray;
+    return $raw_parameters->get_all($key);
 }
 
 sub _decode_parameters {

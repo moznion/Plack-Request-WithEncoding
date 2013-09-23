@@ -25,8 +25,8 @@ subtest 'default encoding (utf-8)' => sub {
     my $expected = decode('utf-8', encode('utf-8', 'ほげ'));
     is $req->param('foo'), $expected;
 
-    my $expected1 = decode('utf-8', encode('utf-8', 'ふが1'));
-    my $expected2 = decode('utf-8', encode('utf-8', 'ふが2'));
+    my $expected1 = 'ふが1';
+    my $expected2 = 'ふが2';
     is_deeply [$req->param('bar')], [$expected1, $expected2];
 };
 
@@ -62,7 +62,7 @@ subtest 'accessor (not decoded)' => sub {
 
     ok !Encode::is_utf8($req->raw_param('foo'));
     ok !Encode::is_utf8($req->raw_query_parameters->{'foo'});
-    ok !Encode::is_utf8($req->raw_body_parameters->{'foo'});
+    ok !Encode::is_utf8($req->raw_body_parameters);
 };
 
 done_testing;

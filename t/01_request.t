@@ -1,8 +1,10 @@
 use strict;
 use warnings;
 use utf8;
-use Plack::Request::WithEncoding;
 use Encode;
+use Hash::MultiValue;
+
+use Plack::Request::WithEncoding;
 
 use Test::More;
 
@@ -21,7 +23,9 @@ subtest 'default encoding (utf-8)' => sub {
 
     ok Encode::is_utf8($req->param('foo'));
     ok Encode::is_utf8($req->query_parameters->{'foo'});
+    ok Encode::is_utf8($req->body_parameters->{'buz'});
     is $req->param('foo'), 'ほげ';
+    is $req->param('buz'), 'こんにちは世界';
     is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
 };
 
@@ -35,7 +39,9 @@ subtest 'custom encoding (cp932)' => sub {
 
     ok Encode::is_utf8($req->param('foo'));
     ok Encode::is_utf8($req->query_parameters->{'foo'});
+    ok Encode::is_utf8($req->body_parameters->{'buz'});
     is $req->query_parameters->{'foo'}, 'ほげ';
+    is $req->param('buz'), 'こんにちは世界';
     is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
 };
 
@@ -52,7 +58,7 @@ subtest 'accessor (not decoded)' => sub {
 
     ok !Encode::is_utf8($req->raw_param('foo'));
     ok !Encode::is_utf8($req->raw_query_parameters->{'foo'});
-    ok !Encode::is_utf8($req->raw_body_parameters);
+    ok !Encode::is_utf8($req->raw_body_parameters->{'buz'});
 };
 
 done_testing;
@@ -64,10 +70,16 @@ sub build_request {
     my $host  = 'example.com';
     my $path  = '/hoge/fuga';
 
-    Plack::Request::WithEncoding->new({
+    my $req = Plack::Request::WithEncoding->new({
         QUERY_STRING   => $query,
         REQUEST_METHOD => 'GET',
         HTTP_HOST      => $host,
         PATH_INFO      => $path,
     });
+
+    $req->env->{'plack.request.body'} = Hash::MultiValue->from_mixed({
+        buz => encode($encoding, 'こんにちは世界'),
+    });
+
+    return $req;
 }

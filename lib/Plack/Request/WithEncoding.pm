@@ -55,7 +55,13 @@ sub raw_query_parameters {
 }
 
 sub raw_parameters {
-    shift->SUPER::parameters;
+    my $self = shift;
+
+    $self->env->{'plack.request.merged'} ||= do {
+        my $query = $self->SUPER::query_parameters();
+        my $body  = $self->SUPER::body_parameters();
+        Hash::MultiValue->new( $query->flatten, $body->flatten );
+    };
 }
 
 sub raw_param {

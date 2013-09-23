@@ -36,6 +36,14 @@ sub parameters {
 }
 
 sub param {
+    my $self = shift;
+
+    my $parameters = $self->parameters;
+    return keys %{ $parameters } if @_ == 0;
+
+    my $key = shift;
+    return $parameters->{$key} unless wantarray;
+    return $parameters->get_all($key);
 }
 
 sub raw_body_parameters {

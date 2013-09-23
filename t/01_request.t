@@ -21,17 +21,12 @@ subtest 'default encoding (utf-8)' => sub {
 
     ok Encode::is_utf8($req->param('foo'));
     ok Encode::is_utf8($req->query_parameters->{'foo'});
-
-    my $expected = decode('utf-8', encode('utf-8', 'ほげ'));
-    is $req->param('foo'), $expected;
-
-    my $expected1 = 'ふが1';
-    my $expected2 = 'ふが2';
-    is_deeply [$req->param('bar')], [$expected1, $expected2];
+    is $req->param('foo'), 'ほげ';
+    is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
 };
 
 subtest 'custom encoding (cp932)' => sub {
-    my $req = build_request();
+    my $req = build_request('cp932');
     $req->env->{'plack.request.withencoding.encoding'} = 'cp932';
 
     subtest 'get encoding information' => sub {
@@ -40,13 +35,8 @@ subtest 'custom encoding (cp932)' => sub {
 
     ok Encode::is_utf8($req->param('foo'));
     ok Encode::is_utf8($req->query_parameters->{'foo'});
-
-    my $expected = decode('cp932', encode('utf-8', 'ほげ'));
-    is $req->query_parameters->{'foo'}, $expected;
-
-    my $expected1 = decode('cp932', encode('utf-8', 'ふが1'));
-    my $expected2 = decode('cp932', encode('utf-8', 'ふが2'));
-    is_deeply [$req->param('bar')], [$expected1, $expected2];
+    is $req->query_parameters->{'foo'}, 'ほげ';
+    is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
 };
 
 subtest 'invalid encoding' => sub {
@@ -68,7 +58,9 @@ subtest 'accessor (not decoded)' => sub {
 done_testing;
 
 sub build_request {
-    my $query = 'foo=%E3%81%BB%E3%81%92&bar=%E3%81%B5%E3%81%8C1&bar=%E3%81%B5%E3%81%8C2'; # <= foo=ほげ&bar=ふが1&bar=ふが2
+    my $encoding = shift || 'utf-8';
+
+    my $query = encode($encoding, 'foo=ほげ&bar=ふが1&bar=ふが2');
     my $host  = 'example.com';
     my $path  = '/hoge/fuga';
 

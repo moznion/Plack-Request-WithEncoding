@@ -4,7 +4,7 @@
       "moznion <moznion@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.6.8, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "Minilla/v0.6.8, CPAN::Meta::Converter version 2.132660",
    "license" : [
       "perl_5"
    ],
@@ -35,14 +35,21 @@
       "develop" : {
          "requires" : {
             "Test::CPAN::Meta" : "0",
+            "Test::LocalFunctions" : "0",
             "Test::MinimumVersion" : "0.10108",
+            "Test::Perl::Critic" : "0",
             "Test::Pod" : "1.41",
-            "Test::Spellunker" : "v0.2.7"
+            "Test::Spellunker" : "v0.2.7",
+            "Test::Vars" : "0"
          }
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008005"
+            "Encode" : "0",
+            "Hash::MultiValue" : "0",
+            "Plack::Request" : "0",
+            "parent" : "0",
+            "perl" : "5.008001"
          }
       },
       "test" : {
@@ -52,5 +59,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/moznion/Plack-Request-WithEncoding/issues"
+      },
+      "homepage" : "https://github.com/moznion/Plack-Request-WithEncoding",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/moznion/Plack-Request-WithEncoding.git",
+         "web" : "https://github.com/moznion/Plack-Request-WithEncoding"
+      }
+   },
    "version" : "0.01"
 }

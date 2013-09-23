@@ -13,3 +13,9 @@ on configure => sub {
 on test => sub {
     requires 'Test::More', '0.98';
 };
+
+on develop => sub {
+    requires 'Test::LocalFunctions';
+    requires 'Test::Perl::Critic';
+    requires 'Test::Vars';
+};

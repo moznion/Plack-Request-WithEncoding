@@ -35,6 +35,9 @@ sub parameters {
     }
 }
 
+sub param {
+}
+
 sub raw_body_parameters {
     shift->SUPER::body_parameters;
 }
@@ -63,8 +66,7 @@ sub _decode_parameters {
 
     my $encoding = Encode::find_encoding($self->encoding);
     unless ($encoding) {
-        my $error_message = sprintf("Unknown encoding '%s'. It will use '%s'.", $encoding, DEFAULT_ENCODING);
-        Carp::croak($error_message);
+        Carp::croak("Unknown encoding '$encoding'.");
     }
 
     my @flatten  = $stuff->flatten;

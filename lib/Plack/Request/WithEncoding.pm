@@ -63,9 +63,8 @@ sub _decode_parameters {
 
     my $encoding = $self->encoding;
     unless (Encode::find_encoding($encoding)) {
-        my $warning = sprintf("Unknown encoding '%s'. It will use '%s'.", $encoding, DEFAULT_ENCODING);
-        Carp::carp($warning);
-        $encoding = DEFAULT_ENCODING;
+        my $error_message = sprintf("Unknown encoding '%s'. It will use '%s'.", $encoding, DEFAULT_ENCODING);
+        Carp::croak($error_message);
     }
 
     my @flatten  = $stuff->flatten;

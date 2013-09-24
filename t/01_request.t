@@ -76,7 +76,18 @@ done_testing;
 sub build_request {
     my $encoding = shift || 'utf-8';
 
-    my $query = encode($encoding, 'foo=ほげ&bar=ふが1&bar=ふが2');
+    # raw param: foo=ほげ&bar=ふが1&bar=ふが2
+    my $query;
+    if ($encoding eq 'utf-8') {
+        $query = 'foo=%e3%81%bb%e3%81%92&bar=%e3%81%b5%e3%81%8c1&bar=%e3%81%b5%e3%81%8c2';
+    }
+    elsif ($encoding eq 'cp932') {
+        $query = 'foo=%82%d9%82%b0&bar=%82%d3%82%aa1&bar=%82%d3%82%aa2';
+    }
+    else {
+        die 'Specified encoding is unknown.';
+    }
+
     my $host  = 'example.com';
     my $path  = '/hoge/fuga';
 

@@ -99,15 +99,105 @@ __END__
 
 =head1 NAME
 
-Plack::Request::WithEncoding - It's new $module
+Plack::Request::WithEncoding - Subclass of L<Plack::Request> which supports encoding.
 
 =head1 SYNOPSIS
 
     use Plack::Request::WithEncoding;
 
+    my $app_or_middleware = sub {
+        my $env = shift; # PSGI env
+
+        # Example of $env
+        #
+        # $env = {
+        #     QUERY_STRING   => 'query=%82%d9%82%b0', # <= encoded by 'cp932'
+        #     REQUEST_METHOD => 'GET',
+        #     HTTP_HOST      => 'example.com',
+        #     PATH_INFO      => '/foo/bar',
+        # };
+
+        my $req = Plack::Request::WithEncoding->new($env);
+        $req->env->{'plack.request.withencoding.encoding'} = 'cp932'; # <= specify the encoding method.
+
+        my $query = $req->param('query'); # <= get parameters of 'query' that is decoded by 'cp932'.
+
+        my $res = $req->new_response(200); # new Plack::Response
+        $res->finalize;
+    };
+
 =head1 DESCRIPTION
 
-Plack::Request::WithEncoding is ...
+Plack::Request::WithEncoding is the subclass of L<Plack::Request>.
+This module supports the encoding for requests, the following attributes will return decoded request values.
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item * encoding
+
+Returns a encoding method to use to decode parameters.
+
+=item * query_parameters
+
+Returns a reference to a hash containing B<decoded> query string (GET)
+parameters. This hash reference is L<Hash::MultiValue> object.
+
+=item * body_parameters
+
+Returns a reference to a hash containing B<decoded> posted parameters in the
+request body (POST). As with C<query_parameters>, the hash
+reference is a L<Hash::MultiValue> object.
+
+=item * parameters
+
+Returns a L<Hash::MultiValue> hash reference containing B<decoded> (merged) GET
+and POST parameters.
+
+=item * param
+
+Returns B<decoded> GET and POST parameters with a CGI.pm-compatible param
+method. This is an alternative method for accessing parameters in
+$req->parameters. Unlike CGI.pm, it does I<not> allow
+setting or modifying query parameters.
+
+    $value  = $req->param( 'foo' );
+    @values = $req->param( 'foo' );
+    @params = $req->param;
+
+=item * raw_query_parameters
+
+This attribute is the same as `query_parameters` of L<Plack::Request>.
+
+=item * raw_body_parameters
+
+This attribute is the same as `body_parameters` of L<Plack::Request>.
+
+=item * raw_parameters
+
+This attribute is the same as `parameters` of L<Plack::Request>.
+
+=item * raw_param
+
+This attribute is the same as `param` of L<Plack::Request>.
+
+=back
+
+=head1 REQUEST ENVIRONMENTS of Plack
+
+You can specify encoding method, like so;
+
+    $req->env->{'plack.request.withencoding.encoding'} = 'utf-7'; # <= set utf-7
+
+And this encoding method will be used to decode.
+
+Default encoding method is `utf-8`. If `$req->env->{'plack.request.withencoding.encoding'}` is undef
+then default encoding method will be used.
+
+=head1 SEE ALSO
+
+L<Plack::Request>
 
 =head1 LICENSE
 

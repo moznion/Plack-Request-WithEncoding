@@ -7,7 +7,7 @@ perl:
   - 5.16
   - 5.18
 before_script:
-  - cpanm --quiet --notest Test::Vars Test::LocalFunctions Test::Perl::Critic
+  - cpanm --quiet --notest Test::LocalFunctions Test::Perl::Critic
 after_success:
   - cpanm --quiet --notest --skip-satisfied Devel::Cover::Report::Coveralls
   - cover -delete

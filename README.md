@@ -51,7 +51,7 @@ This module supports the encoding for requests, the following attributes will re
 
 - parameters
 
-    Returns a [Hash::MultiValue](http://search.cpan.org/perldoc?Hash::MultiValue) hash reference containing __decoded__ (merged) GET
+    Returns a [Hash::MultiValue](http://search.cpan.org/perldoc?Hash::MultiValue) hash reference containing __decoded__ (and merged) GET
     and POST parameters.
 
 - param

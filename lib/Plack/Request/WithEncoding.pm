@@ -152,7 +152,7 @@ reference is a L<Hash::MultiValue> object.
 
 =item * parameters
 
-Returns a L<Hash::MultiValue> hash reference containing B<decoded> (merged) GET
+Returns a L<Hash::MultiValue> hash reference containing B<decoded> (and merged) GET
 and POST parameters.
 
 =item * param

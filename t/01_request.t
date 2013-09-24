@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Encode;
+use Encode qw/encode is_utf8/;
 use Hash::MultiValue;
 
 use Plack::Request::WithEncoding;
@@ -21,9 +21,9 @@ subtest 'default encoding (utf-8)' => sub {
         is $req->encoding, 'utf-8';
     };
 
-    ok Encode::is_utf8($req->param('foo'));
-    ok Encode::is_utf8($req->query_parameters->{'foo'});
-    ok Encode::is_utf8($req->body_parameters->{'buz'});
+    ok is_utf8($req->param('foo'));
+    ok is_utf8($req->query_parameters->{'foo'});
+    ok is_utf8($req->body_parameters->{'buz'});
     is $req->param('foo'), 'ほげ';
     is $req->param('buz'), 'こんにちは世界';
     is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
@@ -37,9 +37,9 @@ subtest 'custom encoding (cp932)' => sub {
         is $req->encoding, 'cp932';
     };
 
-    ok Encode::is_utf8($req->param('foo'));
-    ok Encode::is_utf8($req->query_parameters->{'foo'});
-    ok Encode::is_utf8($req->body_parameters->{'buz'});
+    ok is_utf8($req->param('foo'));
+    ok is_utf8($req->query_parameters->{'foo'});
+    ok is_utf8($req->body_parameters->{'buz'});
     is $req->query_parameters->{'foo'}, 'ほげ';
     is $req->param('buz'), 'こんにちは世界';
     is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
@@ -56,9 +56,9 @@ subtest 'invalid encoding' => sub {
 subtest 'accessor (not decoded)' => sub {
     my $req = build_request();
 
-    ok !Encode::is_utf8($req->raw_param('foo'));
-    ok !Encode::is_utf8($req->raw_query_parameters->{'foo'});
-    ok !Encode::is_utf8($req->raw_body_parameters->{'buz'});
+    ok !is_utf8($req->raw_param('foo'));
+    ok !is_utf8($req->raw_query_parameters->{'foo'});
+    ok !is_utf8($req->raw_body_parameters->{'buz'});
 };
 
 done_testing;

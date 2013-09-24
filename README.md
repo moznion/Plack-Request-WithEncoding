@@ -67,29 +67,29 @@ This module supports the encoding for requests, the following attributes will re
 
 - raw\_query\_parameters
 
-    This attribute is the same as \`query\_parameters\` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
+    This attribute is the same as `query_parameters` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
 
 - raw\_body\_parameters
 
-    This attribute is the same as \`body\_parameters\` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
+    This attribute is the same as `body_parameters` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
 
 - raw\_parameters
 
-    This attribute is the same as \`parameters\` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
+    This attribute is the same as `parameters` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
 
 - raw\_param
 
-    This attribute is the same as \`param\` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
+    This attribute is the same as `param` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
 
 # REQUEST ENVIRONMENTS of Plack
 
-You can specify encoding method, like so;
+You can specify the encoding method, like so;
 
     $req->env->{'plack.request.withencoding.encoding'} = 'utf-7'; # <= set utf-7
 
 And this encoding method will be used to decode.
 
-Default encoding method is \`utf-8\`. If \`$req->env->{'plack.request.withencoding.encoding'}\` is undef
+Default encoding method is __utf-8__. If `$req-`env->{'plack.request.withencoding.encoding'}> is undef
 then default encoding method will be used.
 
 # SEE ALSO

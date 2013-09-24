@@ -27,6 +27,11 @@ subtest 'default encoding (utf-8)' => sub {
     is $req->param('foo'), 'ほげ';
     is $req->param('buz'), 'こんにちは世界';
     is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
+
+    my $got = $req->param('bar');
+    is $got, 'ふが2';
+
+    is_deeply [sort {$a cmp $b} $req->param], ['bar', 'buz', 'foo']
 };
 
 subtest 'custom encoding (cp932)' => sub {
@@ -43,6 +48,11 @@ subtest 'custom encoding (cp932)' => sub {
     is $req->query_parameters->{'foo'}, 'ほげ';
     is $req->param('buz'), 'こんにちは世界';
     is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
+
+    my $got = $req->param('bar');
+    is $got, 'ふが2';
+
+    is_deeply [sort {$a cmp $b} $req->param], ['bar', 'buz', 'foo']
 };
 
 subtest 'invalid encoding' => sub {

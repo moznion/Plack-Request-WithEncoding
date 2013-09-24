@@ -3,6 +3,7 @@ use warnings;
 use utf8;
 use Encode qw/encode is_utf8/;
 use Hash::MultiValue;
+use HTTP::Request;
 use HTTP::Request::Common;
 
 use Plack::Request::WithEncoding;
@@ -84,7 +85,13 @@ subtest 'custom encoding (cp932)' => sub {
         };
         test_psgi $app, sub {
             my $cb  = shift;
-            my $res = $cb->(POST '/', { foo => encode('cp932', 'こんにちは世界') });
+            my $req = HTTP::Request->new('POST', '/');
+            $req->header(
+                "content-length" => 44,
+                "content-type" => "application/x-www-form-urlencoded"
+            );
+            $req->content('foo=%82%B1%82%F1%82%C9%82%BF%82%CD%90%A2%8AE'); # <= encoded by 'cp932'
+            my $res = $cb->($req);
             ok $res->is_success;
         };
     };

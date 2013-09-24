@@ -29,12 +29,11 @@ subtest 'default encoding (utf-8)' => sub {
             ok is_utf8($req->query_parameters->{'foo'});
         };
 
-        is $req->param('foo'), 'ほげ',           'get query value of parameter';
+        is $req->param('foo'), 'ほげ', 'get query value of parameter';
 
         my $got = $req->param('bar');
         is $got, 'ふが2', 'get tail of value when context requires the scalar';
         is_deeply [$req->param('bar')], ['ふが1', 'ふが2'], 'get all value as array when context requires the array';
-
         is_deeply [sort {$a cmp $b} $req->param], ['bar', 'foo'], 'get keys of all params when it with no arguments';
     };
 
@@ -47,7 +46,7 @@ subtest 'default encoding (utf-8)' => sub {
         };
         test_psgi $app, sub {
             my $cb  = shift;
-            my $res = $cb->(POST '/', { foo => encode('utf-8', 'こんにちは世界') });
+            my $res = $cb->(POST '/', { foo => 'こんにちは世界' });
             ok $res->is_success;
         };
     };
@@ -67,13 +66,11 @@ subtest 'custom encoding (cp932)' => sub {
             ok is_utf8($req->query_parameters->{'foo'});
         };
 
-        is $req->param('foo'), 'ほげ',           'get query value of parameter';
+        is $req->param('foo'), 'ほげ', 'get query value of parameter';
 
         my $got = $req->param('bar');
         is $got, 'ふが2', 'get tail of value when context requires the scalar';
         is_deeply [$req->param('bar')], ['ふが1', 'ふが2'], 'get all value as array when context requires the array';
-
-        is_deeply [sort {$a cmp $b} $req->param], ['bar', 'foo'], 'get keys of all params when it with no arguments';
     };
 
     subtest 'POST' => sub {
@@ -115,19 +112,17 @@ subtest 'accessor (not decoded)' => sub {
     is $got, encode('utf-8', 'ふが2'), 'get tail of value when context requires the scalar';
     is_deeply [$req->raw_param('bar')], [encode('utf-8', 'ふが1'), encode('utf-8', 'ふが2')], 'get all value as array when context requires the array';
 
-    is_deeply [sort {$a cmp $b} $req->raw_param], ['bar', 'foo'], 'get keys of all params when it with no arguments';
-
     subtest 'POST' => sub {
         my $app = sub {
             my $req = Plack::Request::WithEncoding->new(shift);
 
-            ok !is_utf8($req->raw_body_parameters->{'foo'}), 'decoded rightly';
+            ok !is_utf8($req->raw_body_parameters->{'foo'}), 'not decoded';
             is $req->raw_body_parameters->{'foo'}, encode('utf-8', 'こんにちは世界'), 'get body value of parameter';
             $req->new_response(200)->finalize;
         };
         test_psgi $app, sub {
             my $cb  = shift;
-            my $res = $cb->(POST '/', { foo => encode('utf-8', 'こんにちは世界') });
+            my $res = $cb->(POST '/', { foo => 'こんにちは世界' });
             ok $res->is_success;
         };
     };

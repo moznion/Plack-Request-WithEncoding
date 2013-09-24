@@ -84,7 +84,7 @@ sub _decode_parameters {
         Carp::croak("Unknown encoding '$invalid_encoding'.");
     }
 
-    my @flatten  = $stuff->flatten;
+    my @flatten = $stuff->flatten;
     my @decoded;
     while ( my ($k, $v) = splice @flatten, 0, 2 ) {
         push @decoded, $encoding->decode($k), $encoding->decode($v);

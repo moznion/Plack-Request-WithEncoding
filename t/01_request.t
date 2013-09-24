@@ -24,6 +24,7 @@ subtest 'default encoding (utf-8)' => sub {
     ok is_utf8($req->param('foo'));
     ok is_utf8($req->query_parameters->{'foo'});
     ok is_utf8($req->body_parameters->{'buz'});
+
     is $req->param('foo'), 'ほげ';
     is $req->param('buz'), 'こんにちは世界';
     is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
@@ -45,7 +46,8 @@ subtest 'custom encoding (cp932)' => sub {
     ok is_utf8($req->param('foo'));
     ok is_utf8($req->query_parameters->{'foo'});
     ok is_utf8($req->body_parameters->{'buz'});
-    is $req->query_parameters->{'foo'}, 'ほげ';
+
+    is $req->param('foo'), 'ほげ';
     is $req->param('buz'), 'こんにちは世界';
     is_deeply [$req->param('bar')], ['ふが1', 'ふが2'];
 
@@ -69,6 +71,15 @@ subtest 'accessor (not decoded)' => sub {
     ok !is_utf8($req->raw_param('foo'));
     ok !is_utf8($req->raw_query_parameters->{'foo'});
     ok !is_utf8($req->raw_body_parameters->{'buz'});
+
+    is $req->raw_param('foo'), encode('utf-8', 'ほげ');
+    is $req->raw_param('buz'), encode('utf-8', 'こんにちは世界');
+    is_deeply [$req->raw_param('bar')], [encode('utf-8', 'ふが1'), encode('utf-8', 'ふが2')];
+
+    my $got = $req->raw_param('bar');
+    is $got, encode('utf-8', 'ふが2');
+
+    is_deeply [sort {$a cmp $b} $req->raw_param], ['bar', 'buz', 'foo']
 };
 
 done_testing;

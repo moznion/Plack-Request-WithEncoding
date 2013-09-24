@@ -89,7 +89,7 @@ You can specify the encoding method, like so;
 
 And this encoding method will be used to decode.
 
-Default encoding method is __utf-8__. If `$req-`env->{'plack.request.withencoding.encoding'}> is undef
+Default encoding method is __utf-8__. If `$req->env->{'plack.request.withencoding.encoding'}` is undef
 then default encoding method will be used.
 
 # SEE ALSO

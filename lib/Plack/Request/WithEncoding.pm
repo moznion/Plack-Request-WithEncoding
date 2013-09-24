@@ -186,7 +186,7 @@ This attribute is the same as `param` of L<Plack::Request>.
 
 =head1 REQUEST ENVIRONMENTS of Plack
 
-You can specify encoding method, like so;
+You can specify the encoding method, like so;
 
     $req->env->{'plack.request.withencoding.encoding'} = 'utf-7'; # <= set utf-7
 

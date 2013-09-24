@@ -168,19 +168,19 @@ setting or modifying query parameters.
 
 =item * raw_query_parameters
 
-This attribute is the same as `query_parameters` of L<Plack::Request>.
+This attribute is the same as C<query_parameters> of L<Plack::Request>.
 
 =item * raw_body_parameters
 
-This attribute is the same as `body_parameters` of L<Plack::Request>.
+This attribute is the same as C<body_parameters> of L<Plack::Request>.
 
 =item * raw_parameters
 
-This attribute is the same as `parameters` of L<Plack::Request>.
+This attribute is the same as C<parameters> of L<Plack::Request>.
 
 =item * raw_param
 
-This attribute is the same as `param` of L<Plack::Request>.
+This attribute is the same as C<param> of L<Plack::Request>.
 
 =back
 
@@ -192,7 +192,7 @@ You can specify the encoding method, like so;
 
 And this encoding method will be used to decode.
 
-Default encoding method is `utf-8`. If `$req->env->{'plack.request.withencoding.encoding'}` is undef
+Default encoding method is B<utf-8>. If C<$req->env->{'plack.request.withencoding.encoding'}> is undef
 then default encoding method will be used.
 
 =head1 SEE ALSO

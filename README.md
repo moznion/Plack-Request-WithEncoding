@@ -20,7 +20,11 @@ Plack::Request::WithEncoding - Subclass of [Plack::Request](http://search.cpan.o
         # };
 
         my $req = Plack::Request::WithEncoding->new($env);
+
         $req->env->{'plack.request.withencoding.encoding'} = 'cp932'; # <= specify the encoding method.
+
+        # If `$req->env->{'plack.request.withencoding.encoding'}` is undef (namely, the encoding method is not specified),
+        # then this library will use `utf-8` as encoding method.
 
         my $query = $req->param('query'); # <= get parameters of 'query' that is decoded by 'cp932'.
 

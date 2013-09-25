@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/moznion/Plack-Request-WithEncoding.png?branch=master)](https://travis-ci.org/moznion/Plack-Request-WithEncoding) [![Coverage Status](https://coveralls.io/repos/moznion/Plack-Request-WithEncoding/badge.png?branch=master)](https://coveralls.io/r/moznion/Plack-Request-WithEncoding?branch=master) 
 # NAME
 
 Plack::Request::WithEncoding - Subclass of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request) which supports encoding.

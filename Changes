@@ -2,5 +2,7 @@ Revision history for Perl extension Plack-Request-WithEncoding
 
 {{$NEXT}}
 
+0.01 2013-09-25T01:52:39Z
+
     - original version
 

@@ -13,7 +13,9 @@ use constant KEY_BASE_NAME    => 'plack.request.withencoding';
 use constant DEFAULT_ENCODING => 'utf-8';
 
 sub encoding {
-    $_[0]->env->{KEY_BASE_NAME . '.encoding'} ||= DEFAULT_ENCODING;
+    my $env = $_[0]->env;
+    my $k = KEY_BASE_NAME . '.encoding';
+    exists $env->{$k} ? $env->{$k} : ($env->{$k} = DEFAULT_ENCODING);
 }
 
 sub body_parameters {
@@ -66,6 +68,7 @@ sub raw_param {
 
 sub _decode_parameters {
     my ($self, $stuff) = @_;
+    return $stuff unless $self->encoding;
 
     my $encoding = Encode::find_encoding($self->encoding);
     unless ($encoding) {

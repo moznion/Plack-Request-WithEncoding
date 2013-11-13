@@ -7,7 +7,7 @@ use Encode ();
 use Carp ();
 use Hash::MultiValue;
 
-our $VERSION = "0.01";
+our $VERSION = "0.10";
 
 use constant KEY_BASE_NAME    => 'plack.request.withencoding';
 use constant DEFAULT_ENCODING => 'utf-8';
@@ -88,6 +88,8 @@ sub _decode_parameters {
 __END__
 
 =encoding utf-8
+
+=for stopwords CGI.pm-compatible
 
 =head1 NAME
 

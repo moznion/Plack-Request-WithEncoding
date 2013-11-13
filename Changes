@@ -2,6 +2,10 @@ Revision history for Perl extension Plack-Request-WithEncoding
 
 {{$NEXT}}
 
+0.10 2013-11-13T14:06:00Z
+
+    - Changed to enable to set undef value to encoding setting (@songmu++)
+
 0.01 2013-09-25T01:52:39Z
 
     - original version

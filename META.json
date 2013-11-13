@@ -4,7 +4,7 @@
       "moznion <moznion@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.7.0, CPAN::Meta::Converter version 2.132661",
+   "generated_by" : "Minilla/v0.8.1, CPAN::Meta::Converter version 2.132830",
    "license" : [
       "perl_5"
    ],
@@ -21,7 +21,8 @@
          "share",
          "eg",
          "examples",
-         "author"
+         "author",
+         "builder"
       ]
    },
    "prereqs" : {
@@ -69,9 +70,12 @@
       "homepage" : "https://github.com/moznion/Plack-Request-WithEncoding",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/moznion/Plack-Request-WithEncoding.git",
+         "url" : "git://github.com/moznion/Plack-Request-WithEncoding",
          "web" : "https://github.com/moznion/Plack-Request-WithEncoding"
       }
    },
-   "version" : "0.01"
+   "version" : "0.10",
+   "x_contributors" : [
+      "Songmu <y.songmu@gmail.com>"
+   ]
 }

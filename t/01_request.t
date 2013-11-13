@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Encode qw/encode is_utf8/;
+use Encode qw/encode is_utf8 encode_utf8/;
 use Hash::MultiValue;
 use HTTP::Request;
 use HTTP::Request::Common;
@@ -92,6 +92,44 @@ subtest 'custom encoding (cp932)' => sub {
             );
             $req->content('foo=%82%B1%82%F1%82%C9%82%BF%82%CD%90%A2%8AE'); # <= encoded by 'cp932'
             my $res = $cb->($req);
+            ok $res->is_success;
+        };
+    };
+};
+
+subtest 'custom encoding (undef)' => sub {
+    subtest 'GET' => sub {
+        my $req = build_request();
+        $req->env->{'plack.request.withencoding.encoding'} = undef;
+
+        subtest 'get encoding information' => sub {
+            is $req->encoding, undef;
+        };
+
+        subtest 'not decoded' => sub {
+            ok !is_utf8($req->param('foo'));
+            ok !is_utf8($req->query_parameters->{'foo'});
+        };
+
+        is $req->param('foo'), encode_utf8('ほげ'), 'get query value of parameter';
+
+        my $got = $req->param('bar');
+        is $got, encode_utf8('ふが2'), 'get tail of value when context requires the scalar';
+        is_deeply [$req->param('bar')], [map {encode_utf8 $_} qw/ふが1 ふが2/], 'get all value as array when context requires the array';
+    };
+
+    subtest 'POST' => sub {
+        my $app = sub {
+            my $req = Plack::Request::WithEncoding->new(shift);
+            $req->env->{'plack.request.withencoding.encoding'} = undef;
+
+            ok !is_utf8($req->body_parameters->{'foo'}), 'not decoded';
+            is $req->body_parameters->{'foo'}, encode_utf8('こんにちは世界'), 'get body value of parameter';
+            $req->new_response(200)->finalize;
+        };
+        test_psgi $app, sub {
+            my $cb  = shift;
+            my $res = $cb->(POST '/', { foo => 'こんにちは世界' });
             ok $res->is_success;
         };
     };

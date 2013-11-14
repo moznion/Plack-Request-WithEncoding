@@ -23,9 +23,6 @@ Plack::Request::WithEncoding - Subclass of [Plack::Request](http://search.cpan.o
 
         $req->env->{'plack.request.withencoding.encoding'} = 'cp932'; # <= specify the encoding method.
 
-        # If `$req->env->{'plack.request.withencoding.encoding'}` is undef (namely, the encoding method is not specified),
-        # then this library will use `utf-8` as encoding method.
-
         my $query = $req->param('query'); # <= get parameters of 'query' that is decoded by 'cp932'.
 
         my $res = $req->new_response(200); # new Plack::Response
@@ -36,6 +33,7 @@ Plack::Request::WithEncoding - Subclass of [Plack::Request](http://search.cpan.o
 
 Plack::Request::WithEncoding is the subclass of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
 This module supports the encoding for requests, the following attributes will return decoded request values.
+Please refer also ["SPECIFICATION OF THE ENCODING METHOD"](#SPECIFICATION OF THE ENCODING METHOD).
 
 # ATTRIBUTES
 
@@ -86,7 +84,7 @@ This module supports the encoding for requests, the following attributes will re
 
     This attribute is the same as `param` of [Plack::Request](http://search.cpan.org/perldoc?Plack::Request).
 
-# REQUEST ENVIRONMENTS of Plack
+# SPECIFICATION OF THE ENCODING METHOD
 
 You can specify the encoding method, like so;
 
@@ -94,8 +92,25 @@ You can specify the encoding method, like so;
 
 And this encoding method will be used to decode.
 
-Default encoding method is __utf-8__. If `$req->env->{'plack.request.withencoding.encoding'}` is undef
-then default encoding method will be used.
+When not once substituted for \`$req->env->{'plack.request.withencoding.encoding'}\`,
+this module will use \`utf-8\` as encoding method.
+However the behavior of a program will become unclear if this function is used. Therefore __YOU SHOULD NOT USE THIS__.
+You should specify the encoding method explicitly.
+
+In case of false value (e.g. \`undef\`, 0, '') is explicitly substituted for \`$req->env->{'plack.request.withencoding.encoding'}\`,
+then this module will return __raw value__ (with no encoding).
+
+The example of a code is shown below.
+
+    print exists $req->env->{'plack.request.withencoding.encoding'} ? 'EXISTS'
+                                                                    : 'NOT EXISTS'; # <= NOT EXISTS
+    $query = $req->param('query'); # <= get parameters of 'query' that is decoded by 'utf-8' (*** YOU SHOULD NOT USE LIKE THIS ***)
+
+    $req->env->{'plack.request.withencoding.encoding'} = undef; # <= explicitly specify the `undef`
+    $query = $req->param('query'); # <= get parameters of 'query' that is not decoded (raw value)
+
+    $req->env->{'plack.request.withencoding.encoding'} = 'cp932'; # <= specify the 'cp932' as encoding method
+    $query = $req->param('query'); # <= get parameters of 'query' that is decoded by 'cp932'
 
 # SEE ALSO
 

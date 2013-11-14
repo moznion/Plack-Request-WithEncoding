@@ -15,6 +15,8 @@ use constant DEFAULT_ENCODING => 'utf-8';
 sub encoding {
     my $env = $_[0]->env;
     my $k = KEY_BASE_NAME . '.encoding';
+
+    # In order to be able to specify the `undef` into $req->env->{plack.request.withencoding.encoding}
     exists $env->{$k} ? $env->{$k} : ($env->{$k} = DEFAULT_ENCODING);
 }
 
@@ -68,7 +70,7 @@ sub raw_param {
 
 sub _decode_parameters {
     my ($self, $stuff) = @_;
-    return $stuff unless $self->encoding;
+    return $stuff unless $self->encoding; # return raw value if encoding method is `undef`
 
     my $encoding = Encode::find_encoding($self->encoding);
     unless ($encoding) {
@@ -89,7 +91,7 @@ __END__
 
 =encoding utf-8
 
-=for stopwords CGI.pm-compatible
+=for stopwords CGI.pm-compatible $req->env->{'plack.request.withencoding.encoding'} utf-8
 
 =head1 NAME
 
@@ -115,9 +117,6 @@ Plack::Request::WithEncoding - Subclass of L<Plack::Request> which supports enco
 
         $req->env->{'plack.request.withencoding.encoding'} = 'cp932'; # <= specify the encoding method.
 
-        # If `$req->env->{'plack.request.withencoding.encoding'}` is undef (namely, the encoding method is not specified),
-        # then this library will use `utf-8` as encoding method.
-
         my $query = $req->param('query'); # <= get parameters of 'query' that is decoded by 'cp932'.
 
         my $res = $req->new_response(200); # new Plack::Response
@@ -128,6 +127,7 @@ Plack::Request::WithEncoding - Subclass of L<Plack::Request> which supports enco
 
 Plack::Request::WithEncoding is the subclass of L<Plack::Request>.
 This module supports the encoding for requests, the following attributes will return decoded request values.
+Please refer also L</"SPECIFICATION OF THE ENCODING METHOD">.
 
 =head1 ATTRIBUTES
 
@@ -182,7 +182,7 @@ This attribute is the same as C<param> of L<Plack::Request>.
 
 =back
 
-=head1 REQUEST ENVIRONMENTS of Plack
+=head1 SPECIFICATION OF THE ENCODING METHOD
 
 You can specify the encoding method, like so;
 
@@ -190,8 +190,25 @@ You can specify the encoding method, like so;
 
 And this encoding method will be used to decode.
 
-Default encoding method is B<utf-8>. If C<< $req->env->{'plack.request.withencoding.encoding'} >> is undef
-then default encoding method will be used.
+When not once substituted for `$req->env->{'plack.request.withencoding.encoding'}`,
+this module will use `utf-8` as encoding method.
+However the behavior of a program will become unclear if this function is used. Therefore B<YOU SHOULD NOT USE THIS>.
+You should specify the encoding method explicitly.
+
+In case of false value (e.g. `undef`, 0, '') is explicitly substituted for `$req->env->{'plack.request.withencoding.encoding'}`,
+then this module will return B<raw value> (with no encoding).
+
+The example of a code is shown below.
+
+    print exists $req->env->{'plack.request.withencoding.encoding'} ? 'EXISTS'
+                                                                    : 'NOT EXISTS'; # <= NOT EXISTS
+    $query = $req->param('query'); # <= get parameters of 'query' that is decoded by 'utf-8' (*** YOU SHOULD NOT USE LIKE THIS ***)
+
+    $req->env->{'plack.request.withencoding.encoding'} = undef; # <= explicitly specify the `undef`
+    $query = $req->param('query'); # <= get parameters of 'query' that is not decoded (raw value)
+
+    $req->env->{'plack.request.withencoding.encoding'} = 'cp932'; # <= specify the 'cp932' as encoding method
+    $query = $req->param('query'); # <= get parameters of 'query' that is decoded by 'cp932'
 
 =head1 SEE ALSO
 

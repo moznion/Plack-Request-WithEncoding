@@ -7,7 +7,7 @@ use Encode ();
 use Carp ();
 use Hash::MultiValue;
 
-our $VERSION = "0.13";
+our $VERSION = "0.14";
 
 use constant KEY_BASE_NAME    => 'plack.request.withencoding';
 use constant DEFAULT_ENCODING => 'utf-8';
